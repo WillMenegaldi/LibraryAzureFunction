@@ -10,7 +10,7 @@ namespace LibraryDataAgent
 {
     public class BooksDataAgent : IBooksDataAgent
     {
-        class DBConnect
+        class DBConnect 
         {
             private MySqlConnection connection;
 
@@ -18,7 +18,6 @@ namespace LibraryDataAgent
             {
                 InitializeDB();
             }
-
             public string Server { get; set; }
             public string User_id { get; set; }
             public string Database { get; set; }
