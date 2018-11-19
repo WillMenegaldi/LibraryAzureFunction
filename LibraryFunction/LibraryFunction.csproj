@@ -9,6 +9,9 @@
     <PackageReference Include="MySql.Data" Version="8.0.13" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\LibraryDataAgent.cs\LibraryDataAgent.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <None Update="host.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
