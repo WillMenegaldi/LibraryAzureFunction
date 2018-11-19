@@ -16,7 +16,7 @@ using System.Collections.Generic;
 namespace LibraryFunction
 {
     [DependencyInjectionConfig(typeof(DIConfig))]
-    public static class BooksFunction
+    public static class GetBooksFunction
     {
         [FunctionName("GetMethod")]
         public static async Task<IActionResult> Run(
@@ -40,7 +40,8 @@ namespace LibraryFunction
             if (book != null)
             {
                 livro = bookDataAgent.Select(select);
-            } else
+            }
+            else
             {
                 livro = bookDataAgent.Select(selectAll);
             }
