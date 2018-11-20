@@ -36,7 +36,7 @@ namespace LibraryUnitTest
 
             string serializedBook = JsonConvert.SerializeObject(book);
             var bookDataAgentMock = new Mock<IBooksDataAgent>();
-
+            var code = book.Isbn;
             var booksDataAgent = new BooksDataAgent();
             var result = await PostBookFunction.Run(HttpRequestMock(null, serializedBook), bookDataAgentMock.Object, log.Object);
             var resultObject = (ObjectResult)result;

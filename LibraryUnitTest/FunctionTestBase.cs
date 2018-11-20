@@ -12,7 +12,7 @@ namespace LibraryUnitTest
 {
     public class FunctionTestBase
     {
-        public HttpRequest HttpRequestMock(Dictionary<string, StringValues> query, string body, string token)
+        public HttpRequest HttpRequestMock(Dictionary<string, StringValues> query, string body)
         {
             var reqMock = new Mock<HttpRequest>();
 
@@ -23,10 +23,7 @@ namespace LibraryUnitTest
             writer.Flush();
             stream.Position = 0;
             reqMock.Setup(req => req.Body).Returns(stream);
-            if (!string.IsNullOrEmpty(token))
-            {
-                reqMock.Setup(req => req.Headers["Authorization"]).Returns(new StringValues(string.Concat("Static ", token)));
-            }
+
             return reqMock.Object;
         }
     }
