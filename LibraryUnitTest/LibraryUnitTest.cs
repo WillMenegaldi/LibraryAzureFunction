@@ -1,4 +1,4 @@
-using LibraryDataAgent;
+﻿using LibraryDataAgent;
 using LibraryDataAgent.Interfaces;
 using LibraryDataAgent.Models;
 using LibraryFunction;
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace LibraryUnitTests
+namespace LibraryUnitTest
 {
     public class LibraryUnitTest : FunctionTestBase
     {
