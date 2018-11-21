@@ -8,6 +8,6 @@ namespace LibraryDataAgent.Interfaces
     public interface IBooksDataAgent
     {
         List<string[]> Select(string query);
-        void ManipulationQuery(string query);
+        string ManipulationQuery(string query);
     }
 }

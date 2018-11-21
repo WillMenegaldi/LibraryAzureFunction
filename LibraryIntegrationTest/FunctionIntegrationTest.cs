@@ -29,16 +29,16 @@ namespace LibraryIntegrationTest
         {
             Books book = new Books(_isbn, _nmbook, _idauthor, _idpublisher)
             {
-                Isbn = "0000000000009",
+                Isbn = "0200400000009",
                 Nmbook = "TESTE",
-                Idauthor = 100,
-                Idpublisher = 100
+                Idauthor = 10,
+                Idpublisher = 10
             };
 
             string body = JsonConvert.SerializeObject(book);
 
             var bookDataAgent = new BooksDataAgent();
-            var result = await PostBookFunction.Run(HttpRequestMock(null, body), bookDataAgent, log.Object);
+            IActionResult result = await PostBookFunction.Run(HttpRequestMock(null, body), bookDataAgent, log.Object);
             var resultObject = (ObjectResult)result;
             Assert.Equal(200, resultObject.StatusCode);
         }

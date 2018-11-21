@@ -53,10 +53,11 @@ namespace LibraryDataAgent
             return livro;
         }
 
-        public void ManipulationQuery(string query)
+        public string ManipulationQuery(string query)
         {
             MySqlCommand cmd = new MySqlCommand(query, connection);
             cmd.ExecuteNonQuery();
+            return "ok";
         }
     }
 }
