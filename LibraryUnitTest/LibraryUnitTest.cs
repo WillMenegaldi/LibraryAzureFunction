@@ -28,7 +28,7 @@ namespace LibraryUnitTest
         {
             Books book = new Books(_isbn, _nmbook, _idauthor, _idpublisher)
             {
-                Isbn = "9999999999999",
+                Isbn = "0000000000009,
                 Nmbook = "TESTE",
                 Idauthor = 100,
                 Idpublisher = 100
@@ -36,7 +36,7 @@ namespace LibraryUnitTest
 
             string serializedBook = JsonConvert.SerializeObject(book);
             var bookDataAgentMock = new Mock<IBooksDataAgent>();
-            var code = book.Isbn;
+            
             var booksDataAgent = new BooksDataAgent();
             var result = await PostBookFunction.Run(HttpRequestMock(null, serializedBook), bookDataAgentMock.Object, log.Object);
             var resultObject = (ObjectResult)result;
