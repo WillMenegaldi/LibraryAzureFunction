@@ -26,7 +26,7 @@ namespace LibraryFunction
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            string book = req.Query["idbook"];
+            string book = req.Query["isbn"];
 
             string select = $"SELECT * FROM BOOK WHERE ISBN = {book}";
             string selectAll = "SELECT * FROM BOOK";

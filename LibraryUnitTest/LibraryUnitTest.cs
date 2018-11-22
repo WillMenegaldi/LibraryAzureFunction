@@ -26,11 +26,29 @@ namespace LibraryUnitTest
         public int Idpublisher { get; set; }
 
         [Fact]
-        public async Task Test_SelectBooks()
+        public async Task Test_SelectBookByID()
         {
-            Books book = new Books(Isbn, Nmbook, Idauthor, Idpublisher);
+            var bookDataAgentMock = new Mock<IBooksDataAgent>();
 
-            string serializedBook = JsonConvert.SerializeObject(book);
+            var query = new Dictionary<string, StringValues>();
+            string idBook = "0000000000001";
+            query.Add("isbn", idBook);
+
+            List<string[]> livro = new List<string[]>();
+
+            bookDataAgentMock.Setup(x => x.Select(It.IsAny<string>()))
+                .Returns(livro);
+
+            var booksDataAgent = new BooksDataAgent();
+            var result = await GetBooksFunction.Run(HttpRequestMock(query, null), bookDataAgentMock.Object, log.Object);
+            var resultObject = (ObjectResult)result;
+
+            Assert.Equal(200, resultObject.StatusCode);
+        }
+
+        [Fact]
+        public async Task Test_SelectAllBooks()
+        {
             var bookDataAgentMock = new Mock<IBooksDataAgent>();
 
             List<string[]> livro = new List<string[]>();
@@ -39,7 +57,7 @@ namespace LibraryUnitTest
                 .Returns(livro);
 
             var booksDataAgent = new BooksDataAgent();
-            var result = await GetBooksFunction.Run(HttpRequestMock(null, serializedBook), bookDataAgentMock.Object, log.Object);
+            var result = await GetBooksFunction.Run(HttpRequestMock(null, null), bookDataAgentMock.Object, log.Object);
             var resultObject = (ObjectResult)result;
 
             Assert.Equal(200, resultObject.StatusCode);
@@ -95,22 +113,23 @@ namespace LibraryUnitTest
         {
             Books book = new Books(Isbn, Nmbook, Idauthor, Idpublisher)
             {
-                Isbn = "ISBN_TESTTEST",
-                Nmbook = "NAME_TEST",
-                Idauthor = 100,
-                Idpublisher = 100
+                Nmbook = "NAME_TESTUNIT",
+                Idauthor = 49,
+                Idpublisher = 49
             };
+
+            var query = new Dictionary<string, StringValues>();
+            string idBook = "0000000000009";
+            query.Add("isbn", idBook);
 
             string serializedBook = JsonConvert.SerializeObject(book);
             var bookDataAgentMock = new Mock<IBooksDataAgent>();
 
-            List<string[]> livro = new List<string[]>();
-
             bookDataAgentMock.Setup(x => x.ManipulationQuery(It.IsAny<string>()))
-                .Returns("teste");
+                .Returns("UNIT TEST: UPDATE");
 
             var booksDataAgent = new BooksDataAgent();
-            var result = await PostBookFunction.Run(HttpRequestMock(null, serializedBook), bookDataAgentMock.Object, log.Object);
+            var result = await PutBookFunction.Run(HttpRequestMock(query, serializedBook), bookDataAgentMock.Object, log.Object);
             var resultObject = (ObjectResult)result;
 
             Assert.Equal(200, resultObject.StatusCode);
