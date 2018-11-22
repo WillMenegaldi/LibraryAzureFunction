@@ -2,8 +2,10 @@ using LibraryDataAgent;
 using LibraryDataAgent.Interfaces;
 using LibraryDataAgent.Models;
 using LibraryFunction;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 using Moq;
 using Newtonsoft.Json;
 using System;
@@ -19,17 +21,31 @@ namespace LibraryIntegrationTest
     {
         readonly Mock<ILogger> log = new Mock<ILogger>();
 
-        private string _isbn;
-        private int _idauthor;
-        private int _idpublisher;
-        private string _nmbook;
+        public string Isbn { get; set; }
+        public string Nmbook { get; set; }
+        public int Idauthor { get; set; }
+        public int Idpublisher { get; set; }
+
+        [Fact]
+        public async Task Test_SelectBooks()
+        {
+            Books book = new Books(Isbn, Nmbook, Idauthor, Idpublisher);
+            
+            string serializedBook = JsonConvert.SerializeObject(book);
+
+            var bookDataAgent = new BooksDataAgent();
+            IActionResult result = await GetBooksFunction.Run(HttpRequestMock(null, serializedBook), bookDataAgent, log.Object);
+            var resultObject = (ObjectResult)result;
+            //var serializedResult = JsonConvert.SerializeObject(result);
+            Assert.Equal(200, resultObject.StatusCode);
+        }
 
         [Fact]
         public async Task Test_InsertBooks()
         {
-            Books book = new Books(_isbn, _nmbook, _idauthor, _idpublisher)
+            Books book = new Books(Isbn, Nmbook, Idauthor, Idpublisher)
             {
-                Isbn = "0200400000009",
+                Isbn = "ISBN_TESTTEST",
                 Nmbook = "TESTE",
                 Idauthor = 10,
                 Idpublisher = 10
@@ -39,6 +55,40 @@ namespace LibraryIntegrationTest
 
             var bookDataAgent = new BooksDataAgent();
             IActionResult result = await PostBookFunction.Run(HttpRequestMock(null, body), bookDataAgent, log.Object);
+            var resultObject = (ObjectResult)result;
+            Assert.Equal(200, resultObject.StatusCode);
+        }
+
+        [Fact]
+        public async Task Test_DeleteBooks()
+        {
+            var query = new Dictionary<string, StringValues>();
+            string idBook = "0000400000009";
+            query.Add("isbn", idBook);
+
+            var bookDataAgent = new BooksDataAgent();
+            IActionResult result = await DeleteBooksFunction.Run(HttpRequestMock(query, null), bookDataAgent, log.Object);
+            var resultObject = (ObjectResult)result;
+            Assert.Equal(200, resultObject.StatusCode);
+        }
+
+        [Fact]
+        public async Task Test_UpdateBooks()
+        {
+            Books book = new Books(Isbn, Nmbook, Idauthor, Idpublisher)
+            {
+                Nmbook = "INTEGRACAOHEA",
+                Idauthor = 49,
+                Idpublisher = 49
+            };
+
+            string body = JsonConvert.SerializeObject(book);
+            var query = new Dictionary<string, StringValues>();
+            string idBook = "0000000000009";
+            query.Add("isbn", idBook);
+
+            var bookDataAgent = new BooksDataAgent();
+            IActionResult result = await PutBookFunction.Run(HttpRequestMock(query, body), bookDataAgent, log.Object);
             var resultObject = (ObjectResult)result;
             Assert.Equal(200, resultObject.StatusCode);
         }
